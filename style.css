@@ -1,0 +1,232 @@
+@font-face {
+    font-family: Minecraftia;
+    src: url(res/fonts/Minecraftia.ttf);
+}
+
+body {
+	background-image: url(res/imgs/bg.png);
+	background-attatchment: fixed;
+}
+
+#content {
+	width: 1100px;
+	margin: 0 auto;
+}
+
+#wrapper {
+	background-color: rgba(50, 50, 50, 0.6);
+	font-family: Minecraftia;
+	color: #fff;
+	text-shadow: 3px 3px 0px #191919;
+	font-size: 24px;
+	display: inline-block;
+	width: 1100px;
+}
+
+#left {
+	float: left;
+	width: 20%;
+	margin: 20px;
+}
+
+#right {
+	float: right;
+	width: 60%;
+}
+
+#panel {
+	width: 300px;
+	height: 600px;
+}
+
+.dropDown {
+	line-height: 35px;
+	width: 500px;
+	position: relative;
+}
+
+.dropDown.small {
+	width: 60px;
+}
+
+.dropDown  > div {
+	margin-left: 50px;
+}
+
+.dropDown.small > div {
+	margin-left: 0px;
+}
+
+.dropDown .shown {
+	width: 400px;
+}
+
+.dropDown.small .shown {
+	width: 40px;
+}
+
+.lArrow, .rArrow , .dropDown .option , .color, .dArrow, .uArrow {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100%;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.lArrow, .rArrow {
+	height: 44px;
+	width: 28px;
+	margin: 0 11px;
+	margin-top: -2px;
+}
+
+.lArrow {
+	background-image: url(res/imgs/lArrow.png);
+	float: left;
+}
+
+.lArrow:hover {
+	background-image: url(res/imgs/lArrowHover.png);
+}
+
+.rArrow {
+	background-image: url(res/imgs/rArrow.png);
+	float: right;
+}
+
+.rArrow:hover {
+	background-image: url(res/imgs/rArrowHover.png);
+}
+
+.dropDown .options {
+	overflow-x: hidden;
+	max-height: 120px;
+	position: absolute;
+	z-index: 1;
+	width: 420px;
+}
+
+.dropDown.small .options {
+	width: 60px;
+}
+
+.dropDown  .option , .color {
+	height: 40px;
+	width: 400px;
+	text-align: center;
+	background-image: url(res/imgs/box.png);
+	display: block;
+}
+
+.dropDown  .option:hover {
+	background-image: url(res/imgs/boxHover.png);
+}
+
+.dropDown.small .option , .color {
+	width: 40px;
+	background-image: url(res/imgs/icon.png);
+}
+
+.dropDown.small .option:hover , .color:hover, .color.selected {
+	background-image: url(res/imgs/iconHover.png);
+}
+
+#options {
+	margin-right: -100px;
+}
+
+.layerSelect {
+	display: block;
+	max-height: 40px;
+	margin-bottom: 65px;
+}
+
+.layerSelect > * {
+	display: inline-block;
+}
+
+.layerSelect > div, .layerSelect .options {
+	top: -37px;
+	margin-top: 80px;
+}
+
+.layerSelect .dropDown.small {
+	top: -29px;
+}
+
+.layerSelect img {
+	margin: 5px 0;
+}
+
+.adjust {
+	margin-bottom: 25px;
+	margin-left: 20px;
+}
+
+.dArrow, .uArrow {
+	width: 22px;
+	height: 14px;
+	display: block;
+}
+
+.dArrow {
+	margin-top: 5px;
+	background-image: url(res/imgs/dArrow.png);
+}
+
+.dArrow:hover {
+	background-image: url(res/imgs/dArrowHover.png);
+}
+
+.uArrow {
+	background-image: url(res/imgs/uArrow.png);
+}
+
+.uArrow:hover {
+	background-image: url(res/imgs/uArrowHover.png);
+}
+
+.layerSelect:first-child .uArrow, .layerSelect:last-child .dArrow {
+	visibility: hidden;
+}
+
+#bgColorLabel {
+	transform: rotate(-90deg);
+	-ms-transform: rotate(-90deg);
+	-webkit-transform: rotate(-90deg);
+	position: absolute;
+	top: 340px;
+	left: -15px;
+}
+
+#colors {
+	float: left;
+	margin-top: 10px;
+}
+
+#colors  img, .val img{
+	margin: 3px;
+}
+
+#panel {
+	margin-left: 50px;
+}
+
+#panel > * {
+	height: 660px;
+	width: 330px;
+	position: absolute;
+}
+
+#colorLabel {
+	text-align: center;
+	position: absolute;
+	margin-left: -20px;
+	margin-top: -10px;
+}
+
+#layerLabel {
+	position: absolute;
+	margin-left: 205px;
+	margin-top: 28px;
+}

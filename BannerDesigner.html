@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!--
+	Author: Zachary Kaplan
+	CopyRight: Creative Commons
+	Graphics: Minecraft by Mojang (c) - Some graphics were edited by me (Zachary Kaplan)
+	Font: Minecraftia by Andrew Tyler (font@andrewtyler.net) - taken from https://www.dafont.com
+-->
+<head>
+	<title>Banner Designer</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript">
+		String.prototype.capitalize = function() { //adds capitalize to String class
+			return this.charAt(0).toUpperCase() + this.slice(1);
+		}
+		
+		var clickInt, clear = true, clicked = false;
+		
+		var layerNames = ['none', 'bricks', 'border', 'circle', 'creeper', 'cross', 'curly_border', 'diagonal_left', 'diagonal_right', 'flower', 'gradient', 
+				'half_horizontal', 'half_vertical', 'mojang', 'rhombus', 'skull', 'small_stripes', 'square_bottom_left', 'square_bottom_right', 
+				'square_top_left', 'square_top_right', 'straight_cross', 'stripe_bottom', 'stripe_center', 'stripe_downleft', 'stripe_downright', 
+				'stripe_left', 'stripe_middle', 'stripe_right', 'stripe_top', 'triangle_bottom', 'triangle_top', 'triangles_bottom', 'triangles_top']
+		var layerDisplay = ['None', 'Bricks', 'Border', 'Circle', 'Creeper', 'Cross (Diagonal)', 'Curly Border', 'Left Diagonal', 'Right Diagonal', 'Flower', 
+				'Gradient', 'Horizontal Half', 'Vertical Half', 'Thing (Mojang)', 'Rhombus', 'Skull', 'Small Stripes', 'Bottom Left Square', 
+				'Bottom Right Square', 'Top Left Square', 'Top Right Square', 'Cross (Straight)', 'Bottom Stripe', 'Center Stripe', 'Down Left Diagonal', 
+				'Down Right Diagonal', 'Left Stripe', 'Middle Stripe', 'Right Stripe', 'Top Stripe', 'Bottom Triangle', 'Top Triangle', 'Bottom Saw',
+				'Top Saw']
+		var colorNames = ['black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'silver', 
+				'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'];
+		var dye = 'dye_powder_';
+		var colors = [];
+		for(var i = 0; i<colorNames.length; i++) {
+			colors.push('<img title="' + colorNames[i].capitalize().replace('_', ' ') + 
+				'" src="res/imgs/' + dye + colorNames[i] + '.png" style="height: 32px; width: 32px;" />');
+		}
+		
+		var dropDowns = [];
+		
+		function DropDown(element, htmlArr, small) {
+			if(typeof(small) === 'undefined') small = false;
+			var $this = $('<div class="dropDown"><div class="shown"><div class="option" /></div><div class="options" /></div>');
+			for(var i = 0; i<htmlArr.length; i++) {
+				$this.find('.options').append('<div class="option"><div class="val" data-pos="'+i+'">'+htmlArr[i]+'</div></div>');
+			}
+			$this.find('.options').hide();
+			$this.find('.shown .option').append($this.find('.option:first-child .val').clone());
+			var pos = 0;
+			if(small) {
+				$this.addClass('small');
+			} else {
+				$this.prepend($('<span class="lArrow" /><span class="rArrow" />'));
+			}
+			$this.data('num', dropDowns.length);
+			dropDowns.push(this);
+			element.append($this);
+			
+			this.length = htmlArr.length;
+			
+			this.getVal = function() {
+				return pos;
+			}
+			
+			this.next = function() {
+				this.goto((pos+1) % this.length);
+			}
+			
+			this.prev = function() {
+				this.goto(pos === 0 ? this.length-1 : pos-1);
+			}
+			
+			this.goto = function(i) {
+				if(i < 0 || i >= this.length) return false;
+				$this.find('.shown .option').empty().append($this.find('.option .val[data-pos="'+i+'"]').clone());
+				pos = i;
+			}
+			
+		}
+		
+		var numLayers = 0;
+		var layers = [];
+		
+		function Layer() {
+			var $this = $('<div class="layerSelect" data-num="' + numLayers++ + '" />');
+			var colorSelect = new DropDown($this, colors, true), layerSelect = new DropDown($this, layerDisplay);
+			$this.append('<img title="Layer Preview" alt="" style="height: 80px; width: 40px;" />');
+			$this.append('<div class="adjust"><div class="uArrow" /><div class="dArrow" /></div>');
+			
+			$('#right #options').append($this);
+			layers.push(this);
+			
+			this.getColorNum = function() {
+				return colorSelect.getVal();
+			}
+			
+			this.getLayerNum = function() {
+				return layerSelect.getVal();
+			}
+			
+			this.update = function() {
+				var imgStr;
+				if(layerSelect.getVal() === 0) {
+					imgStr = '';
+					$this.find('img[title="Layer Preview"]').attr('src', imgStr).css('background-color', 'rgba(0,0,0,0)');
+				} else {
+					imgStr = 'res/imgs/banners/' + layerNames[layerSelect.getVal()] + '_' + colorNames[colorSelect.getVal()] + '.png';
+					$this.find('img[title="Layer Preview"]').attr('src', imgStr).css('background-color', colorSelect.getVal() === 15 ? '#000' : '#fff');
+				}
+				$('.layer[data-num="' + $this.data('num') + '"]').attr('src', imgStr);
+			}
+			
+			this.refresh = function(layerNum, colorNum) { //create new layer based on parameters
+				layerSelect.goto(layerNum);
+				colorSelect.goto(colorNum);
+				this.update();
+			}
+			
+		}
+		
+		function handlers() {
+			//dropDown functionality
+			$('.dropDown .shown').click(function() { //show dropDown menu
+				$this = $(this).parent().find('.options');
+				var show = $this.is(':hidden');
+				$('.options').hide();
+				if(show) $this.show();
+			});
+			$('.dropDown .options .option').click(function() { //change to option, hide menu
+				var $this = $(this), $parent = $this.parent();
+				$parent.hide();
+				dropDowns[parseInt($parent.parent().data('num'))].goto(parseInt($this.find('.val').data('pos')));
+			});
+			$('.lArrow').on('action', function() {
+				if(clicked) return;
+				dropDowns[parseInt($(this).parent().data('num'))].prev();
+				clicked = true;
+				setTimeout(function() { clicked = false; }, 90);
+			});
+			$('.rArrow').on('action', function() {
+				if(clicked) return;
+				dropDowns[parseInt($(this).parent().data('num'))].next();
+				clicked = true;
+				setTimeout(function() { clicked = false; }, 90);
+			});
+			$('.lArrow, .rArrow').mousedown(function() {
+				if(!clear) return;
+				clear = false;
+				$this = $(this).trigger('action');
+				setTimeout(function() {
+					clearInterval(clickInt);
+					clickInt = setInterval(function() {
+						if(clear) clearInterval(clickInt);
+						else $this.trigger('action');
+					}, 100);
+				}, 1000);
+			}).mouseup(function() {
+				clear = true;
+			});
+			$('#colors .color').click(function() {
+				$('#base').attr('src', 'res/imgs/banners/base_' + colorNames[parseInt($(this).data('num'))] + '.png');
+				$('.color').removeClass('selected');
+				$(this).addClass('selected');
+			});
+			$('.layerSelect').click(function() {
+				layers[parseInt($(this).attr('data-num'))].update();
+			});
+			$('.uArrow').click(function() {
+				var $layer = $(this).parent().parent(), $prev = $layer.prev(), layer = layers[parseInt($layer.data('num'))], 
+						prev = layers[parseInt($prev.data('num'))], tempLayerNum = prev.getLayerNum(), tempColorNum = prev.getColorNum();
+				prev.refresh(layer.getLayerNum(), layer.getColorNum());
+				layer.refresh(tempLayerNum, tempColorNum);
+			});
+			$('.dArrow').click(function() {
+				var $layer = $(this).parent().parent(), $next = $layer.next(), layer = layers[parseInt($layer.data('num'))], 
+						next = layers[parseInt($next.data('num'))], tempLayerNum = next.getLayerNum(), tempColorNum = next.getColorNum();
+				next.refresh(layer.getLayerNum(), layer.getColorNum());
+				layer.refresh(tempLayerNum, tempColorNum);
+			});
+		}
+		
+		$(document).ready(function() {
+		
+			for(var i = 0; i<colors.length; i++) {
+				$('#colors').append($('<div class="color" data-num="'+i+'" />').append(colors[i]));
+			}
+			
+			$panel = $('#panel');
+			$panel.append($('<img id="base" />'));
+			for(var i = 0; i<6; i++) {
+				$panel.append($('<img class="layer" data-num="'+i+'" />'));
+				new Layer();
+			}
+			
+			handlers(); //init handlers
+			$('.color[data-num=15]').trigger('click'); //select white as default background
+			
+		});
+	</script>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<div id="content">
+		<div id="wrapper">
+			<div id="left">
+				<div id="bgColorLabel">Background Color</div>
+				<div id="colors">
+				</div>
+				<div id="panel">
+				</div>
+			</div>
+			<div id="right">
+				<div id="colorLabel">Layer<br />Color</div>
+				<div id="layerLabel">Layer Pattern</div>
+				<div id="options">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
