@@ -2,14 +2,14 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg>
 <metadata>
-Created by FontForge 20110222 at Fri Jul 25 23:06:45 2014
- By Orthosie Webhosting
+Created by FontForge 20110222 at Sat Jul 26 20:29:53 2014
+ By web3
 Copyright Andrew Tyler
 </metadata>
 <defs>
-<font id="MinecraftiaRegular" horiz-adv-x="768" >
+<font id="Minecraftia" horiz-adv-x="768" >
   <font-face 
-    font-family="MinecraftiaRegular"
+    font-family="Minecraftia"
     font-weight="400"
     font-stretch="normal"
     units-per-em="1024"
@@ -20,7 +20,7 @@ Copyright Andrew Tyler
     cap-height="896"
     bbox="-128 -256 1024 1280"
     underline-thickness="51"
-    underline-position="122"
+    underline-position="123"
     unicode-range="U+0020-FB02"
   />
 <missing-glyph horiz-adv-x="256" 

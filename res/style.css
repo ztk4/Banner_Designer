@@ -1,25 +1,28 @@
 @font-face {
-    font-family: Minecraftia;
-	src: url(fonts/Minecraftia.svg) format(svg),
-		 url(fonts/Minecraftia.eot) format(embedded-opentype),
+    font-family: 'Minecraftia';
+	src: url(fonts/Minecraftia.eot);
+	src: url(fonts/Minecraftia.eot?#iefix) format(embedded-opentype),
          url(fonts/Minecraftia.woff) format(woff),
-         url(fonts/Minecraftia.ttf) format(truetype);
+         url(fonts/Minecraftia.ttf) format(truetype),
+		 url(fonts/Minecraftia.svg#svgMinecraftia) format(svg);
 }
 
 @font-face {
 	font-family: CaviarDreams;
-	src: url(fonts/CaviarDreams.svg) format(svg),
-		 url(fonts/CaviarDreams.eot) format(embedded-opentype),
+	src: url(fonts/CaviarDreams.eot);
+	src: url(fonts/CaviarDreams.eot?#iefix) format(embedded-opentype),
          url(fonts/CaviarDreams.woff) format(woff),
-         url(fonts/CaviarDreams.ttf) format(truetype);
+         url(fonts/CaviarDreams.ttf) format(truetype),
+		 url(fonts/CaviarDreams.svg#svgCaviarDreams) format(svg);
 }
 
 @font-face {
 	font-family: CaviarDreams;
-	src: url(fonts/CaviarDreams_Bold.svg) format(svg),
-		 url(fonts/CaviarDreams_Bold.eot) format(embedded-opentype),
+	src: url(fonts/CaviarDreams_Bold.eot);
+	src: url(fonts/CaviarDreams_Bold.eot?#iefix) format(embedded-opentype),
          url(fonts/CaviarDreams_Bold.woff) format(woff),
-         url(fonts/CaviarDreams_Bold.ttf) format(truetype);
+         url(fonts/CaviarDreams_Bold.ttf) format(truetype),
+		 url(fonts/CaviarDreams_Bold.svg#svgCaviarDreams_Bold) format(svg);
 	font-weight: bold;
 }
 
@@ -65,7 +68,7 @@ body {
 
 #wrapper {
 	background-color: rgba(50, 50, 50, 0.6);
-	font-family: Minecraftia;
+	font-family: 'Minecraftia';
 	color: #fff;
 	text-shadow: 3px 3px 0px #191919;
 	font-size: 24px;
