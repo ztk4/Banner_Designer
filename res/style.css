@@ -1,16 +1,56 @@
 @font-face {
     font-family: Minecraftia;
-    src: url(res/fonts/Minecraftia.ttf);
+    src: url(fonts/Minecraftia.ttf);
+}
+
+@font-face {
+	font-family: CaviarDreams;
+	src: url(fonts/CaviarDreams.ttf);
+}
+
+@font-face {
+	font-family: CaviarDreams;
+	src: url(fonts/CaviarDreams_Bold.ttf);
+	font-weight: bold;
 }
 
 body {
-	background-image: url(res/imgs/bg.png);
+	background-image: url(imgs/bg.png);
 	background-attatchment: fixed;
 }
 
 #content {
 	width: 1100px;
 	margin: 0 auto;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+	width: 100%;
+	margin-left: -10px;
+	background-color: #191919;
+	color: #fff;
+	font-family: CaviarDreams;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+#footer a {
+	color: #aaa;
+}
+
+#footer a:hover {
+	color: #ddd;
+}
+
+#footer a:visited {
+	color: #777;
+}
+
+#footer a:visited:hover {
+	color: #999;
 }
 
 #wrapper {
@@ -81,21 +121,21 @@ body {
 }
 
 .lArrow {
-	background-image: url(res/imgs/lArrow.png);
+	background-image: url(imgs/lArrow.png);
 	float: left;
 }
 
 .lArrow:hover {
-	background-image: url(res/imgs/lArrowHover.png);
+	background-image: url(imgs/lArrowHover.png);
 }
 
 .rArrow {
-	background-image: url(res/imgs/rArrow.png);
+	background-image: url(imgs/rArrow.png);
 	float: right;
 }
 
 .rArrow:hover {
-	background-image: url(res/imgs/rArrowHover.png);
+	background-image: url(imgs/rArrowHover.png);
 }
 
 .dropDown .options {
@@ -114,21 +154,21 @@ body {
 	height: 40px;
 	width: 400px;
 	text-align: center;
-	background-image: url(res/imgs/box.png);
+	background-image: url(imgs/box.png);
 	display: block;
 }
 
 .dropDown  .option:hover {
-	background-image: url(res/imgs/boxHover.png);
+	background-image: url(imgs/boxHover.png);
 }
 
 .dropDown.small .option , .color {
 	width: 40px;
-	background-image: url(res/imgs/icon.png);
+	background-image: url(imgs/icon.png);
 }
 
 .dropDown.small .option:hover , .color:hover, .color.selected {
-	background-image: url(res/imgs/iconHover.png);
+	background-image: url(imgs/iconHover.png);
 }
 
 #options {
@@ -171,19 +211,19 @@ body {
 
 .dArrow {
 	margin-top: 5px;
-	background-image: url(res/imgs/dArrow.png);
+	background-image: url(imgs/dArrow.png);
 }
 
 .dArrow:hover {
-	background-image: url(res/imgs/dArrowHover.png);
+	background-image: url(imgs/dArrowHover.png);
 }
 
 .uArrow {
-	background-image: url(res/imgs/uArrow.png);
+	background-image: url(imgs/uArrow.png);
 }
 
 .uArrow:hover {
-	background-image: url(res/imgs/uArrowHover.png);
+	background-image: url(imgs/uArrowHover.png);
 }
 
 .layerSelect:first-child .uArrow, .layerSelect:last-child .dArrow {

@@ -15,6 +15,7 @@ Notes:  All banner images are generated using python (that I wrote) from alpha c
         assets or downloaded from the Minecraft Wiki
         Also, the font used is Minecraftia by Andrew Tyler (font@andrewtyler.net) and is a pixel for pixel copy of
         the font used in Minecraft. Download at http://www.dafont.com/minecraftia.font
+		The font used in the footer is Caviar Dreams by Lauren Thompson. Download at http://www.dafont.com/caviar-dreams.font
         This page is not commercial and has no adds of any kind. I make no profit from traffic here, but I plan to put in
         a Google Analytics system just to see how many hits I get because I'm curious.
 
