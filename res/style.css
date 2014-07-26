@@ -17,10 +17,11 @@
 body {
 	background-image: url(imgs/bg.png);
 	background-attatchment: fixed;
+	overflow-x: hidden;
 }
 
 #content {
-	width: 1100px;
+	width: 1150px;
 	margin: 0 auto;
 }
 
@@ -60,13 +61,14 @@ body {
 	text-shadow: 3px 3px 0px #191919;
 	font-size: 24px;
 	display: inline-block;
-	width: 1100px;
+	width: 100%;
 }
 
 #left {
 	float: left;
 	width: 20%;
 	margin: 20px;
+	margin-left: 40px;
 }
 
 #right {
@@ -162,6 +164,10 @@ body {
 	background-image: url(imgs/boxHover.png);
 }
 
+.dropDown.hidden .option {
+	background-image: url(imgs/boxGray.png);
+}
+
 .dropDown.small .option , .color {
 	width: 40px;
 	background-image: url(imgs/icon.png);
@@ -199,14 +205,35 @@ body {
 }
 
 .adjust {
-	margin-bottom: 25px;
+	margin-bottom: 17px;
 	margin-left: 20px;
+}
+
+.adjust * {
+	display: block;
 }
 
 .dArrow, .uArrow {
 	width: 22px;
 	height: 14px;
-	display: block;
+}
+
+.hide {
+	margin-top: 5px;
+	margin-left: 1px;
+	width: 20px;
+	height: 20px;
+	background-image: url(imgs/iconSmall.png);
+}
+
+.hide img{
+	position: absolute;
+	margin-top: 1px;
+	margin-left: 2px;
+}
+
+.hide:hover, .hide.selected {
+	background-image: url(imgs/iconSmallHover.png);
 }
 
 .dArrow {
@@ -236,7 +263,7 @@ body {
 	-webkit-transform: rotate(-90deg);
 	position: absolute;
 	top: 340px;
-	left: -15px;
+	left: -20px;
 }
 
 #colors {

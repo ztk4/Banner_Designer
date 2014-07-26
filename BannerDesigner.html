@@ -11,7 +11,12 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript">
 		String.prototype.capitalize = function() { //adds capitalize to String class
-			return this.charAt(0).toUpperCase() + this.slice(1);
+			var temp = '', start = 0, next;
+			while((next=this.indexOf(' ', start)) >= 0) {
+				temp += this.charAt(start).toUpperCase() + this.substring(start+1, next+1);
+				start = next+1;
+			}
+			return temp + this.charAt(start).toUpperCase() + this.substring(start+1);
 		}
 		
 		var clickInt, clear = true, clicked = false;
@@ -25,13 +30,14 @@
 				'Bottom Right Square', 'Top Left Square', 'Top Right Square', 'Cross (Straight)', 'Bottom Stripe', 'Center Stripe', 'Down Left Diagonal', 
 				'Down Right Diagonal', 'Left Stripe', 'Middle Stripe', 'Right Stripe', 'Top Stripe', 'Bottom Triangle', 'Top Triangle', 'Bottom Saw',
 				'Top Saw']
-		var colorNames = ['black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'silver', 
-				'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'];
+		var colorNames = ['black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'silver', 'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 
+				'orange', 'white'];
+		var colorDisplay = ['Black', 'Red', 'Green', 'Brown', 'Blue', 'Purple', 'Cyan', 'Light Gray', 'Gray', 'Pink', 'Lime', 'Yellow', 'Light Blue',
+				'Magenta', 'Orange', 'White'];
 		var dye = 'dye_powder_';
 		var colors = [];
 		for(var i = 0; i<colorNames.length; i++) {
-			colors.push('<img title="' + colorNames[i].capitalize().replace('_', ' ') + 
-				'" src="res/imgs/' + dye + colorNames[i] + '.png" style="height: 32px; width: 32px;" />');
+			colors.push('<img title="' + colorDisplay[i] + '" src="res/imgs/' + dye + colorNames[i] + '.png" style="height: 32px; width: 32px;" />');
 		}
 		
 		var dropDowns = [];
@@ -81,9 +87,11 @@
 		
 		function Layer() {
 			var $this = $('<div class="layerSelect" data-num="' + numLayers++ + '" />');
-			var colorSelect = new DropDown($this, colors, true), layerSelect = new DropDown($this, layerDisplay);
+			var colorSelect = new DropDown($this, colors, true), layerSelect = new DropDown($this, layerDisplay), hidden = false;
 			$this.append('<img title="Layer Preview" alt="" style="height: 80px; width: 40px;" />');
-			$this.append('<div class="adjust"><div class="uArrow" /><div class="dArrow" /></div>');
+			$this.append('<div class="adjust"><div class="uArrow" /><div class="hide" title="Hide Layer"><img src="res/imgs/hide.png" />' + 
+					'</div><div class="dArrow" /></div>');
+			var $hide = $this.find('.hide');
 			
 			$('#right #options').append($this);
 			layers.push(this);
@@ -175,6 +183,14 @@
 				next.refresh(layer.getLayerNum(), layer.getColorNum());
 				layer.refresh(tempLayerNum, tempColorNum);
 			});
+			$('.hide').click(function() { //temporarilly hide layer
+				var $adjust = $(this).toggleClass('selected').parent();
+				$('.layer[data-num=' + $adjust.parent().data('num') + ']').toggle();
+				$adjust.prev().prev().toggleClass('hidden');
+			});
+			$('.uArrow, .dArrow, .lArrow, .rArrow, .hide').click(function() { //hide dropDowns when clicked
+				$('.options').hide();
+			});
 		}
 		
 		$(document).ready(function() {
@@ -217,7 +233,7 @@
 		</div>
 	</div>
 	<div id="footer">
-		Zachary T. Kaplan - Creative Commons<sup>&copy;</sup>&nbsp;&nbsp;|&nbsp;&nbsp;  
+		Authored by: Zachary T. Kaplan&nbsp;&nbsp;|&nbsp;&nbsp;  
 		Graphics - <a href="https://minecraft.net/">Minecraft</a><sup>&copy;</sup> by <a href="https://www.mojang.com" >Mojang</a><sup>&copy;</sup>&nbsp;&nbsp;|&nbsp;&nbsp;
 		<a href="https://www.dafont.com/Minecraftia.font" title="Minecraftia">Font</a> - <a href="mailto:font@andrewtyler.net" title="font@andrewtyler.net" >Andrew Tyler</a>&nbsp;&nbsp;|&nbsp;&nbsp;
 		<a href="https://www.dafont.com/caviar-dreams.font" title="Caviar Dreams">Font</a> - Laruen Thompson
