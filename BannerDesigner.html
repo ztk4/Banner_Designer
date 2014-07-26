@@ -129,19 +129,19 @@
 				$parent.hide();
 				dropDowns[parseInt($parent.parent().data('num'))].goto(parseInt($this.find('.val').data('pos')));
 			});
-			$('.lArrow').on('action', function() {
+			$('.lArrow').on('action', function() { //shift left
 				if(clicked) return;
 				dropDowns[parseInt($(this).parent().data('num'))].prev();
 				clicked = true;
 				setTimeout(function() { clicked = false; }, 90);
 			});
-			$('.rArrow').on('action', function() {
+			$('.rArrow').on('action', function() { //shift right
 				if(clicked) return;
 				dropDowns[parseInt($(this).parent().data('num'))].next();
 				clicked = true;
 				setTimeout(function() { clicked = false; }, 90);
 			});
-			$('.lArrow, .rArrow').mousedown(function() {
+			$('.lArrow, .rArrow').mousedown(function() {  //determine how to trigger action
 				if(!clear) return;
 				clear = false;
 				$this = $(this).trigger('action');
@@ -152,24 +152,24 @@
 						else $this.trigger('action');
 					}, 100);
 				}, 1000);
-			}).mouseup(function() {
+			}).mouseup(function() { //stop triggering action
 				clear = true;
 			});
-			$('#colors .color').click(function() {
+			$('#colors .color').click(function() { //select background color
 				$('#base').attr('src', 'res/imgs/banners/base_' + colorNames[parseInt($(this).data('num'))] + '.png');
 				$('.color').removeClass('selected');
 				$(this).addClass('selected');
 			});
-			$('.layerSelect').click(function() {
+			$('.layerSelect').click(function() { //update layer on click
 				layers[parseInt($(this).attr('data-num'))].update();
 			});
-			$('.uArrow').click(function() {
+			$('.uArrow').click(function() { //cycle layers
 				var $layer = $(this).parent().parent(), $prev = $layer.prev(), layer = layers[parseInt($layer.data('num'))], 
 						prev = layers[parseInt($prev.data('num'))], tempLayerNum = prev.getLayerNum(), tempColorNum = prev.getColorNum();
 				prev.refresh(layer.getLayerNum(), layer.getColorNum());
 				layer.refresh(tempLayerNum, tempColorNum);
 			});
-			$('.dArrow').click(function() {
+			$('.dArrow').click(function() { //cycle layers
 				var $layer = $(this).parent().parent(), $next = $layer.next(), layer = layers[parseInt($layer.data('num'))], 
 						next = layers[parseInt($next.data('num'))], tempLayerNum = next.getLayerNum(), tempColorNum = next.getColorNum();
 				next.refresh(layer.getLayerNum(), layer.getColorNum());
