@@ -88,7 +88,7 @@
 		function Layer() {
 			var $this = $('<div class="layerSelect" data-num="' + numLayers++ + '" />');
 			var colorSelect = new DropDown($this, colors, true), layerSelect = new DropDown($this, layerDisplay), hidden = false;
-			$this.append('<img title="Layer Preview" alt="" style="height: 80px; width: 40px;" />');
+			$this.append('<img title="Layer Preview" src="res/imgs/banners/none.png" style="height: 80px; width: 40px;" />');
 			$this.append('<div class="adjust"><div class="uArrow" /><div class="hide" title="Hide Layer"><img src="res/imgs/hide.png" />' + 
 					'</div><div class="dArrow" /></div>');
 			var $hide = $this.find('.hide');
@@ -106,13 +106,9 @@
 			
 			this.update = function() {
 				var imgStr;
-				if(layerSelect.getVal() === 0) {
-					imgStr = '';
-					$this.find('img[title="Layer Preview"]').attr('src', imgStr).css('background-color', 'rgba(0,0,0,0)');
-				} else {
-					imgStr = 'res/imgs/banners/' + layerNames[layerSelect.getVal()] + '_' + colorNames[colorSelect.getVal()] + '.png';
-					$this.find('img[title="Layer Preview"]').attr('src', imgStr).css('background-color', colorSelect.getVal() === 15 ? '#000' : '#fff');
-				}
+				if(layerSelect.getVal() === 0) imgStr = 'res/imgs/banners/' + layerNames[layerSelect.getVal()] + '.png';
+				else imgStr = 'res/imgs/banners/' + layerNames[layerSelect.getVal()] + '_' + colorNames[colorSelect.getVal()] + '.png';
+				$this.find('img[title="Layer Preview"]').attr('src', imgStr);
 				$('.layer[data-num="' + $this.data('num') + '"]').attr('src', imgStr);
 			}
 			
@@ -164,7 +160,9 @@
 				clear = true;
 			});
 			$('#colors .color').click(function() { //select background color
-				$('#base').attr('src', 'res/imgs/banners/base_' + colorNames[parseInt($(this).data('num'))] + '.png');
+				var imgStr = 'res/imgs/banners/base_' + colorNames[parseInt($(this).data('num'))] + '.png';
+				$('#base').attr('src', imgStr);
+				$('img[title="Layer Preview"]').css('background-image', 'url(' + imgStr + ')');
 				$('.color').removeClass('selected');
 				$(this).addClass('selected');
 			});
