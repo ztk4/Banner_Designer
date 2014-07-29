@@ -19,7 +19,11 @@
 			return temp + this.charAt(start).toUpperCase() + this.substring(start+1);
 		}
 		
-		var clickInt, clear = true, clicked = false;
+		var HEIGHT = $(window).height(), WIDTH = $(window).width();
+		
+		var $toolTip = $('<div class="tooltip"><span id="left" /><span id="center"><span>Text</span></span><span id="right" /></div>').hide();
+		
+		var clickInt, clear = true, clearUp = true, clearDown = true, clicked = false;
 		
 		var layerNames = ['none', 'bricks', 'border', 'circle', 'creeper', 'cross', 'curly_border', 'diagonal_left', 'diagonal_right', 'flower', 'gradient', 
 				'half_horizontal', 'half_vertical', 'mojang', 'rhombus', 'skull', 'small_stripes', 'square_bottom_left', 'square_bottom_right', 
@@ -30,14 +34,35 @@
 				'Bottom Right Square', 'Top Left Square', 'Top Right Square', 'Cross (Straight)', 'Bottom Stripe', 'Center Stripe', 'Down Left Diagonal', 
 				'Down Right Diagonal', 'Left Stripe', 'Middle Stripe', 'Right Stripe', 'Top Stripe', 'Bottom Triangle', 'Top Triangle', 'Bottom Saw',
 				'Top Saw']
+		var layerRecipes = [[], ['   ', 'bB ', ' D '], ['DDD', 'DBD', 'DDD'], ['   ', ' D ', ' B '], ['   ', 'cB ', ' D '], ['D D', 'BD ', 'D D'],
+				['   ', 'vB ', ' D '], ['DD ', 'DB ', '   '], [' DD', ' BD', '   '], ['   ', 'fB ', ' D '], ['DBD', ' D ', ' D '], ['DDD', 'DDD', ' B '],
+				['DD ', 'DDB', 'DD '], ['   ', 'aB ', ' D '], [' D ', 'DBD', ' D '], ['   ', 'wB ', ' D '], ['D D', 'DBD', '   '], ['   ', ' B ', 'D  '],
+				['   ', ' B ', '  D'], ['D  ', ' B ', '   '], ['  D', ' B ', '   '], [' D ', 'DDD', 'BD '], ['   ', ' B ', 'DDD'], [' D ', 'BD ', ' D '],
+				['  D', 'BD ', 'D  '], ['D  ', 'BD ', '  D'], ['D  ', 'DB ', 'D  '], ['   ', 'DDD', ' B '], ['  D', ' BD', '  D'], ['DDD', ' B ', '   '],
+				['   ', 'BD ', 'D D'], ['D D', 'BD ', '   '], ['   ', 'DBD', ' D '], [' D ', 'DBD', '   ']];
+		var bannerRecipe = ['WWW', 'WWW', ' s '];
+		var itemKey = {
+			'a': $('<img src="res/imgs/apple_golden.gif" name="Golden Apple" />'),
+			'b': $('<img src="res/imgs/bricks.png" name="Bricks" />'),
+			'c': $('<img src="res/imgs/skull_creeper.png" name="Creeper Head" />'),
+			'f': $('<img src="res/imgs/flower_oxeye_daisy.png" name="Oxeye Daisy" />'),
+			's': $('<img src="res/imgs/stick.png" name="Stick" />'),
+			'v': $('<img src="res/imgs/vines.png" name="Vines" />'),
+			'w': $('<img src="res/imgs/skull_wither.png" name="Wither Skeleton Skull" />')
+		};
 		var colorNames = ['black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'silver', 'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 
 				'orange', 'white'];
 		var colorDisplay = ['Black', 'Red', 'Green', 'Brown', 'Blue', 'Purple', 'Cyan', 'Light Gray', 'Gray', 'Pink', 'Lime', 'Yellow', 'Light Blue',
 				'Magenta', 'Orange', 'White'];
+		var dyeDisplay = ['Ink Sac', 'Rose Red', 'Cactus Green', 'Cocoa Beans', 'Lapis Lazuli', 'Purple Dye', 'Cyan Dye', 'Light Gray Dye', 'Gray Dye',
+				'Pink Dye', 'Lime Dye', 'Dandelion Yellow', 'Light Blue Dye', 'Magenta Dye', 'Orange Dye', 'Bone Meal'];
 		var dye = 'dye_powder_';
-		var colors = [];
+		var colors = [], dyes = [], wools = [], banners = [];
 		for(var i = 0; i<colorNames.length; i++) {
-			colors.push('<img title="' + colorDisplay[i] + '" src="res/imgs/' + dye + colorNames[i] + '.png" style="height: 32px; width: 32px;" />');
+			colors.push('<img src="res/imgs/' + dye + colorNames[i] + '.png" name="' + colorDisplay[i] + '" style="height: 32px; width: 32px;" />');
+			dyes.push($('<img src="res/imgs/' + dye + colorNames[i] + '.png" name="' + dyeDisplay[i] + '" />'));
+			wools.push($('<img src="res/imgs/wool_' + colorNames[i] + '.png" name="' + colorDisplay[i] + ' Wool" />'));
+			banners.push($('<img src="res/imgs/banner_' + colorNames[i] + '.png" name="' + colorDisplay[i] + ' Banner" />'));
 		}
 		
 		var dropDowns = [];
@@ -49,7 +74,7 @@
 				$this.find('.options').append('<div class="option"><div class="val" data-pos="'+i+'">'+htmlArr[i]+'</div></div>');
 			}
 			$this.find('.options').hide();
-			$this.find('.shown .option').append($this.find('.option:first-child .val').clone());
+			$this.find('.shown .option').append($this.find('.option:first-child .val').clone(true));
 			var pos = 0;
 			if(small) {
 				$this.addClass('small');
@@ -76,7 +101,7 @@
 			
 			this.goto = function(i) {
 				if(i < 0 || i >= this.length) return false;
-				$this.find('.shown .option').empty().append($this.find('.option .val[data-pos="'+i+'"]').clone());
+				$this.find('.shown .option').empty().append($this.find('.option .val[data-pos="'+i+'"]').clone(true));
 				pos = i;
 			}
 			
@@ -86,10 +111,10 @@
 		var layers = [];
 		
 		function Layer() {
-			var $this = $('<div class="layerSelect" data-num="' + numLayers++ + '" />');
+			var $this = $('<div class="layerSelect" data-num="' + numLayers++ + '"><span class="num">' + numLayers + '</span></div>');
 			var colorSelect = new DropDown($this, colors, true), layerSelect = new DropDown($this, layerDisplay), hidden = false;
-			$this.append('<img title="Layer Preview" src="res/imgs/banners/none.png" style="height: 80px; width: 40px;" />');
-			$this.append('<div class="adjust"><div class="uArrow" /><div class="hide" title="Hide Layer"><img src="res/imgs/hide.png" />' + 
+			$this.append('<img name="Pattern Preview" src="res/imgs/banners/none.png" style="height: 80px; width: 40px;" />');
+			$this.append('<div class="adjust"><div class="uArrow" /><div class="hide" name="Hide Layer"><img src="res/imgs/hide.png" />' + 
 					'</div><div class="dArrow" /></div>');
 			var $hide = $this.find('.hide');
 			
@@ -105,17 +130,96 @@
 			}
 			
 			this.update = function() {
-				var imgStr;
-				if(layerSelect.getVal() === 0) imgStr = 'res/imgs/banners/' + layerNames[layerSelect.getVal()] + '.png';
-				else imgStr = 'res/imgs/banners/' + layerNames[layerSelect.getVal()] + '_' + colorNames[colorSelect.getVal()] + '.png';
-				$this.find('img[title="Layer Preview"]').attr('src', imgStr);
-				$('.layer[data-num="' + $this.data('num') + '"]').attr('src', imgStr);
+				var imgStr, layerVal = layerSelect.getVal(), colorVal = colorSelect.getVal();
+				if(layerVal === 0) {
+					imgStr = 'res/imgs/banners/' + layerNames[layerVal] + '.png';
+					$this.find('img[name="Pattern Preview"]').attr('src', imgStr);
+				}
+				else {
+					imgStr = 'res/imgs/banners/' + layerNames[layerVal] + '_' + colorNames[colorVal] + '.png';
+					$this.find('img[name="Pattern Preview"]').attr('src', 'res/imgs/banners/' + layerNames[layerVal] + '_black.png');
+				}
+				var num = $this.data('num');
+				$('.layer[data-num="' + num + '"]').attr('src', imgStr);
+				tables[parseInt(num)+1].refresh(undefined, layerRecipes[layerVal], colorVal);
 			}
 			
 			this.refresh = function(layerNum, colorNum) { //create new layer based on parameters
 				layerSelect.goto(layerNum);
 				colorSelect.goto(colorNum);
 				this.update();
+			}
+			
+		}
+		
+		function down($layer) {
+			var $next = $layer.next(), layer = layers[parseInt($layer.data('num'))], next = layers[parseInt($next.data('num'))], 
+					tempLayerNum = next.getLayerNum(), tempColorNum = next.getColorNum();
+			next.refresh(layer.getLayerNum(), layer.getColorNum());
+			layer.refresh(tempLayerNum, tempColorNum);
+			return $next;
+		}
+		
+		function up($layer) {
+			var $prev = $layer.prev(), layer = layers[parseInt($layer.data('num'))], prev = layers[parseInt($prev.data('num'))], 
+					tempLayerNum = prev.getLayerNum(), tempColorNum = prev.getColorNum();
+			prev.refresh(layer.getLayerNum(), layer.getColorNum());
+			layer.refresh(tempLayerNum, tempColorNum);
+			return $prev;
+		}
+		
+		var tables = [], numTables = 0;
+		
+		function CraftingTable(element) {
+			var $this = $('<div class="recipe" data-num="' + numTables + '"><span class="num">' + numTables++ + '</span><div class="grid" />' +
+					'<span class="result" /></div>'), table = [], $result = $this.find('.result'), lastResult, lastRecipe, lastColor;
+			for(var i = 0; i < 3; i++) { // 3x3 crafting bench
+				$row = $('<div class="row" />'), row = [];
+				for(var j = 0; j < 3; j++) {
+					row.push($('<div class="dat" />'));
+					$row.append(row[j]);
+				}
+				$this.find('.grid').append($row);
+				table.push(row);
+			}
+			tables.push(this);
+			element.append($this.hide());
+			
+			this.refresh = function(result, recipe, color) { //result is essentially bg color
+				if(typeof(result) === 'undefined') result = lastResult;
+				else lastResult = result;
+				if(typeof(recipe) === 'undefined') if(typeof(lastRecipe) === 'undefined') return; else recipe = lastRecipe;
+				else lastRecipe = recipe;
+				if(!recipe.length) { //length 0 implies None recipe, therefore hide grid
+					$this.hide();
+					return;
+				} else $this.show();
+				if(typeof(color) === 'undefined') color = lastColor; //if remains undefined, then it won't be used (ie. banner recipe)
+				else lastColor = color;
+				$result.empty().append(banners[result].clone(true));
+				for(var i = 0; i < 3; i++) {
+					for(var j = 0; j < 3; j++) {
+						var c = recipe[i].charAt(j), item;
+						if(c === ' ') { //space
+							item = $('');
+						}else if(c.charCodeAt(0) < 97) { //Upper Case Letter
+							switch(c) {
+							case 'B': item = banners[result];
+							break;
+							case 'D': item = color === -1 ? $('') : dyes[color];
+							break;
+							case 'W': item = wools[result];
+							break
+							default:
+								console.log("ERROR: Switch Problem @CraftingTable.refresh");
+							}
+						} else { //lower case letters
+							if(color === 0) color = -1; //this means don't display colored dyes essentially (if black and dye isn't necessary)
+							item = itemKey[c] 
+						}
+						table[i][j].empty().append(item.clone(true));
+					}
+				}
 			}
 			
 		}
@@ -160,35 +264,81 @@
 				clear = true;
 			});
 			$('#colors .color').click(function() { //select background color
-				var imgStr = 'res/imgs/banners/base_' + colorNames[parseInt($(this).data('num'))] + '.png';
+				var num = parseInt($(this).data('num')), imgStr = 'res/imgs/banners/base_' + colorNames[num] + '.png';
 				$('#base').attr('src', imgStr);
-				$('img[title="Layer Preview"]').css('background-image', 'url(' + imgStr + ')');
+				for(var i in tables) {
+					tables[i].refresh(num);
+				}
+				//$('img[name="Pattern Preview"]').css('background-image', 'url(' + imgStr + ')'); not used
 				$('.color').removeClass('selected');
 				$(this).addClass('selected');
 			});
 			$('.layerSelect').click(function() { //update layer on click
 				layers[parseInt($(this).attr('data-num'))].update();
 			});
-			$('.uArrow').click(function() { //cycle layers
-				var $layer = $(this).parent().parent(), $prev = $layer.prev(), layer = layers[parseInt($layer.data('num'))], 
-						prev = layers[parseInt($prev.data('num'))], tempLayerNum = prev.getLayerNum(), tempColorNum = prev.getColorNum();
-				prev.refresh(layer.getLayerNum(), layer.getColorNum());
-				layer.refresh(tempLayerNum, tempColorNum);
+			$('.uArrow').mousedown(function() { //cycle layers
+				if(!clearUp) return;
+				clearUp = false;
+				var $layer = up($(this).parent().parent());
+				setTimeout(function f() {
+					setTimeout(function() {
+						if(clearUp || $layer.is(':first-child')) return;
+						$layer = up($layer);
+						f();
+					}, 250);
+				}, 1000);
+			}).mouseup(function() {
+				clearUp = true;
 			});
-			$('.dArrow').click(function() { //cycle layers
-				var $layer = $(this).parent().parent(), $next = $layer.next(), layer = layers[parseInt($layer.data('num'))], 
-						next = layers[parseInt($next.data('num'))], tempLayerNum = next.getLayerNum(), tempColorNum = next.getColorNum();
-				next.refresh(layer.getLayerNum(), layer.getColorNum());
-				layer.refresh(tempLayerNum, tempColorNum);
+			$('.dArrow').mousedown(function() { //cycle layers
+				if(!clearDown) return;
+				clearDown = false;
+				var $layer = down($(this).parent().parent());
+				setTimeout(function f() {
+					setTimeout(function() {
+						if(clearDown || $layer.is(':last-child')) return;
+						$layer = down($layer);
+						f();
+					}, 250);
+				}, 1000);
+			}).mouseup(function() {
+				clearDown = true;
 			});
 			$('.hide').click(function() { //temporarilly hide layer
-				var $adjust = $(this).toggleClass('selected').parent();
-				$('.layer[data-num=' + $adjust.parent().data('num') + ']').toggle();
+				var $adjust = $(this).toggleClass('selected').parent(), num = $adjust.parent().data('num');
+				$('.layer[data-num=' + num + ']').toggle();
+				$('.recipe[data-num='+ (parseInt(num)+1) + ']').toggleClass('hidden');
 				$adjust.prev().prev().toggleClass('hidden');
 			});
 			$('.uArrow, .dArrow, .lArrow, .rArrow, .hide').click(function() { //hide dropDowns when clicked
 				$('.options').hide();
 			});
+			$('*[name]').hover(function() { //enter - sets tooltip
+				var name = $(this).attr('name');
+				$toolTip.show().find('#center span').html(name);
+			}, function() { //leave - clears tooltip
+				$toolTip.hide();
+			});
+			$('*[name="Golden Apple"]').hover(function() { //enter - set class apple
+				$toolTip.addClass('apple');
+			}, function() { //leave - remove class apple
+				$toolTip.removeClass('apple');
+			});
+			$(window).mousemove(function(e) { //move tooltip
+				var w = $toolTip.width(), x = e.clientX + (WIDTH - e.clientX - 10 < w ? -(15 + w) : 15), y = e.clientY - 30;
+				$toolTip.css({left: x+'px', top: y+'px'});
+			});
+		}
+		
+		function init() {
+			for(var i = 0; i < 16; i++) { //add all items into existence (so that hover handlers can be placed on them)
+				$('body').append(dyes[i]).append(wools[i]).append(banners[i]);
+			}
+			for(var key in itemKey) { //more items!
+				$('body').append(itemKey[key]);
+			}
+			handlers(); //add handlers
+			$('body > img').detach(); //remove all items without removing data or events
 		}
 		
 		$(document).ready(function() {
@@ -197,16 +347,21 @@
 				$('#colors').append($('<div class="color" data-num="'+i+'" />').append(colors[i]));
 			}
 			
-			$panel = $('#panel');
+			var $panel = $('#panel'), $crafting = $('#crafting');
 			$panel.append($('<img id="base" />'));
+			new CraftingTable($crafting).refresh(0, bannerRecipe); //set initial recipe
+			$crafting.find('.recipe').css({margin: '0 auto', display: 'block'}).find('.num').remove();
+			$crafting.find('.recipe').prepend('<span id="label" style="position: absolute; margin-left: 230px; margin-top: 10px">Base</span>');
 			for(var i = 0; i<6; i++) {
 				$panel.append($('<img class="layer" data-num="'+i+'" />'));
 				new Layer();
+				new CraftingTable($crafting);
 			}
+			$('body').append($toolTip);
 			
-			handlers(); //init handlers
+			init(); //init handlers on all DOM objects
 			$('.color[data-num=15]').trigger('click'); //select white as default background
-			$('a').attr('target', '_blank');
+			$('a').attr('target', '_blank'); //links open in new tab
 			
 		});
 	</script>
@@ -228,13 +383,16 @@
 				<div id="options">
 				</div>
 			</div>
+			<div id="crafting">
+				<center>Crafting</center>
+			</div>
 		</div>
 	</div>
 	<div id="footer">
 		Authored by: Zachary T. Kaplan&nbsp;&nbsp;|&nbsp;&nbsp;  
 		Graphics - <a href="https://minecraft.net/">Minecraft</a><sup>&copy;</sup> by <a href="https://www.mojang.com" >Mojang</a><sup>&copy;</sup>&nbsp;&nbsp;|&nbsp;&nbsp;
-		<a href="https://www.dafont.com/Minecraftia.font" title="Minecraftia">Font</a> - <a href="mailto:font@andrewtyler.net" title="font@andrewtyler.net" >Andrew Tyler</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-		<a href="https://www.dafont.com/caviar-dreams.font" title="Caviar Dreams">Font</a> - Laruen Thompson
+		<a href="https://www.dafont.com/Minecraftia.font" name="Minecraftia">Font</a> - <a href="mailto:font@andrewtyler.net" name="font@andrewtyler.net" >Andrew Tyler</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+		<a href="https://www.dafont.com/caviar-dreams.font" name="Caviar Dreams">Font</a> - Laruen Thompson
 	</div>
 </body>
 </html>
