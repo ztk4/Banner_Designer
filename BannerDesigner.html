@@ -25,21 +25,23 @@
 		
 		var clickInt, clear = true, clearUp = true, clearDown = true, clicked = false;
 		
-		var layerNames = ['none', 'bricks', 'border', 'circle', 'creeper', 'cross', 'curly_border', 'diagonal_left', 'diagonal_right', 'flower', 'gradient', 
-				'half_horizontal', 'half_vertical', 'mojang', 'rhombus', 'skull', 'small_stripes', 'square_bottom_left', 'square_bottom_right', 
-				'square_top_left', 'square_top_right', 'straight_cross', 'stripe_bottom', 'stripe_center', 'stripe_downleft', 'stripe_downright', 
-				'stripe_left', 'stripe_middle', 'stripe_right', 'stripe_top', 'triangle_bottom', 'triangle_top', 'triangles_bottom', 'triangles_top']
-		var layerDisplay = ['None', 'Bricks', 'Border', 'Circle', 'Creeper', 'Cross (Diagonal)', 'Curly Border', 'Left Diagonal', 'Right Diagonal', 'Flower', 
-				'Gradient', 'Horizontal Half', 'Vertical Half', 'Thing (Mojang)', 'Rhombus', 'Skull', 'Small Stripes', 'Bottom Left Square', 
-				'Bottom Right Square', 'Top Left Square', 'Top Right Square', 'Cross (Straight)', 'Bottom Stripe', 'Center Stripe', 'Down Left Diagonal', 
-				'Down Right Diagonal', 'Left Stripe', 'Middle Stripe', 'Right Stripe', 'Top Stripe', 'Bottom Triangle', 'Top Triangle', 'Bottom Saw',
-				'Top Saw']
+		var layerNames = ['none', 'bricks', 'border', 'circle', 'creeper', 'cross', 'curly_border', 'diagonal_left', 'diagonal_right', 'diagonal_up_left', 
+				'diagonal_up_right', 'flower', 'gradient', 'gradient_up', 'half_horizontal', 'half_horizontal_bottom', 'half_vertical', 'half_vertical_right', 
+				'mojang', 'rhombus', 'skull', 'small_stripes', 'square_bottom_left', 'square_bottom_right', 'square_top_left', 'square_top_right', 
+				'straight_cross', 'stripe_bottom', 'stripe_center', 'stripe_downleft', 'stripe_downright', 'stripe_left', 'stripe_middle', 'stripe_right', 
+				'stripe_top', 'triangle_bottom', 'triangle_top', 'triangles_bottom', 'triangles_top']
+		var layerDisplay = ['None', 'Feild Masoned', 'Bordure', 'Roundel', 'Creeper Charge', 'Saltire', 'Bordure Indented', 'Per Bend Sinister', 'Per Bend', 
+				'Per Bend Inverted', 'Per Bend Sinister Inverted', 'Flower Charge', 'Gradient', 'Base Gradient', 'Per Fess', 'Per Fes Inverted', 'Per Pale', 
+				'Per Pale Inverted', 'Thing (Mojang)', 'Lozenge', 'Skull Charge', 'Paly', 'Base Dexter Canton', 'Base Sinister Canton', 'Cheif Dexter Canton',
+				'Cheif Sinister Canton', 'Cross', 'Base Fess', 'Pale', 'Bend Sinister', 'Bend', 'Pale Dexter', 'Fess', 'Pale Sinister', 'Cheif Fess', 
+				'Chevron', 'Inverted Chevron', 'Base Indented', 'Cheif Indented']
 		var layerRecipes = [[], ['   ', 'bB ', ' D '], ['DDD', 'DBD', 'DDD'], ['   ', ' D ', ' B '], ['   ', 'cB ', ' D '], ['D D', 'BD ', 'D D'],
-				['   ', 'vB ', ' D '], ['DD ', 'DB ', '   '], [' DD', ' BD', '   '], ['   ', 'fB ', ' D '], ['DBD', ' D ', ' D '], ['DDD', 'DDD', ' B '],
-				['DD ', 'DDB', 'DD '], ['   ', 'aB ', ' D '], [' D ', 'DBD', ' D '], ['   ', 'wB ', ' D '], ['D D', 'DBD', '   '], ['   ', ' B ', 'D  '],
-				['   ', ' B ', '  D'], ['D  ', ' B ', '   '], ['  D', ' B ', '   '], [' D ', 'DDD', 'BD '], ['   ', ' B ', 'DDD'], [' D ', 'BD ', ' D '],
-				['  D', 'BD ', 'D  '], ['D  ', 'BD ', '  D'], ['D  ', 'DB ', 'D  '], ['   ', 'DDD', ' B '], ['  D', ' BD', '  D'], ['DDD', ' B ', '   '],
-				['   ', 'BD ', 'D D'], ['D D', 'BD ', '   '], ['   ', 'DBD', ' D '], [' D ', 'DBD', '   ']];
+				['   ', 'vB ', ' D '], ['DD ', 'DB ', '   '], [' DD', ' BD', '   '], ['   ', 'DB ', 'DD '], ['   ', ' BD', ' DD'], ['   ', 'fB ', ' D '], 
+				['DBD', ' D ', ' D '], [' D ', ' D ', 'DBD'], ['DDD', 'DDD', ' B '], [' B ', 'DDD', 'DDD'], ['DD ', 'DDB', 'DD '], [' DD', 'BDD', ' DD'],
+				['   ', 'aB ', ' D '], [' D ', 'DBD', ' D '], ['   ', 'wB ', ' D '], ['D D', 'DBD', '   '], ['   ', ' B ', 'D  '], ['   ', ' B ', '  D'], 
+				['D  ', ' B ', '   '], ['  D', ' B ', '   '], [' D ', 'DDD', 'BD '], ['   ', ' B ', 'DDD'], [' D ', 'BD ', ' D '], ['  D', 'BD ', 'D  '], 
+				['D  ', 'BD ', '  D'], ['D  ', 'DB ', 'D  '], ['   ', 'DDD', ' B '], ['  D', ' BD', '  D'], ['DDD', ' B ', '   '], ['   ', 'BD ', 'D D'], 
+				['D D', 'BD ', '   '], ['   ', 'DBD', ' D '], [' D ', 'DBD', '   ']];
 		var bannerRecipe = ['WWW', 'WWW', ' s '];
 		var itemKey = {
 			'a': $('<img src="res/imgs/apple_golden.gif" name="Golden Apple" />'),
@@ -392,7 +394,8 @@
 		Authored by: Zachary T. Kaplan&nbsp;&nbsp;|&nbsp;&nbsp;  
 		Graphics - <a href="https://minecraft.net/">Minecraft</a><sup>&copy;</sup> by <a href="https://www.mojang.com" >Mojang</a><sup>&copy;</sup>&nbsp;&nbsp;|&nbsp;&nbsp;
 		<a href="https://www.dafont.com/Minecraftia.font" name="Minecraftia">Font</a> - <a href="mailto:font@andrewtyler.net" name="font@andrewtyler.net" >Andrew Tyler</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-		<a href="https://www.dafont.com/caviar-dreams.font" name="Caviar Dreams">Font</a> - Laruen Thompson
+		<a href="https://www.dafont.com/caviar-dreams.font" name="Caviar Dreams">Font</a> - Laruen Thompson&nbsp;&nbsp;|&nbsp;&nbsp;  
+		<a href="http://www.minecraftforum.net/forums/minecraft-discussion/recent-updates-and-snapshots/future-updates/2160794-online-banner-designer-easy-and-fast-way-to-design" name="Forum Post">Bugs or Hugs?</a>
 	</div>
 </body>
 </html>
