@@ -360,6 +360,9 @@ body {
 	min-width: 4px;
 	min-height: 32px;
 	display: inline-block;
+	float: none;
+	position: relative;
+	top: 2px;
 }
 
 .tooltip #left {
