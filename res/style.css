@@ -291,9 +291,10 @@ body {
 	transform: rotate(-90deg);
 	-ms-transform: rotate(-90deg);
 	-webkit-transform: rotate(-90deg);
-	position: absolute;
-	top: 340px;
-	left: -20px;
+	position: relative;
+	margin-left: -270px;
+	margin-top: -40px;
+	top: 230px;
 }
 
 #colors {
